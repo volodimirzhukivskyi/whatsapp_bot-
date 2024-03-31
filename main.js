@@ -26,7 +26,18 @@ app.get('/send-message', async (req, res) => {
   // client.sendMessage(allChats[0].id, text);
   res.send('Message sent!');
 });
+app.get('/', (req, res) => {
+  client.on('qr', (qr) => {
+    // Generate QR code
+    qrcode.generate(qr, { small: true });
 
+    // Convert the QR code to base64 format
+    qrcode.toDataURL(qr, (err, url) => {
+      // Send the QR code as an HTML image
+      res.send('<img src="' + url + '">');
+    });
+  });
+});
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
